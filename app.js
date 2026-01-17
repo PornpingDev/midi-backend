@@ -3,8 +3,19 @@ const app = express();
 const cors = require('cors');
 const cookieSession = require('cookie-session');
 
+
+
+/* ===== HEALTH CHECK (ต้องอยู่บน ๆ) ===== */
+app.get("/health", (req, res) => {
+  res.status(200).send("ok");
+});
+
+
+
 /* ---------- Core Middlewares ---------- */
 app.set('trust proxy', 1); // เผื่อรันหลัง proxy/HTTPS ในอนาคต
+
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
