@@ -20,17 +20,34 @@ app.set('trust proxy', 1); // เผื่อรันหลัง proxy/HTTPS �
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://midi-stock-management.web.app',
+  'https://midi-stock-management.firebaseapp.com',
+];
+
 app.use(cors({
-  origin: [process.env.FRONTEND_ORIGIN || 'http://localhost:5173'],
-  credentials: true
+  origin: function (origin, callback) {
+    // อนุญาต request ที่ไม่มี origin (เช่น curl/postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS: ' + origin), false);
+  },
+  credentials: true,
 }));
+
+
+const isProd = process.env.NODE_ENV === "production";
 
 app.use(cookieSession({
   name: 'midi.sid',
   secret: process.env.SESSION_SECRET || 'midi-super-secret',
   httpOnly: true,
-  sameSite: 'lax',   // โปรดักชันข้ามโดเมนให้ใช้ 'none' + secure:true
-  secure: false,     // true เมื่อใช้ HTTPS จริง
+  sameSite: isProd ? 'none' : 'lax',
+  secure: isProd, // prod = true (https), dev = false (http)
   maxAge: 7 * 24 * 60 * 60 * 1000
 }));
 
