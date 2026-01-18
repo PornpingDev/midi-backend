@@ -116,14 +116,9 @@ app.use((err, req, res, next) => {
 });
 
 /* Listen */
-const PORT = process.env.PORT;
+const PORT = Number(process.env.PORT) || 8080;
 
-if (!PORT) {
-  console.error("❌ PORT is not defined");
-  process.exit(1);
-}
-
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("✅ Server running on port", PORT);
 });
 
