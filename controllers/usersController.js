@@ -111,7 +111,7 @@ exports.resetPassword = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const DEFAULT_PASSWORD = process.env.DEFAULT_PASSWORD || 'password123';
+    const DEFAULT_PASSWORD = process.env.DEFAULT_PASSWORD || 'Sripara5105809';
     const hashedPassword = await bcrypt.hash(DEFAULT_PASSWORD, 10);
 
     await db.query(
