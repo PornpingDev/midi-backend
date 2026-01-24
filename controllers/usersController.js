@@ -111,7 +111,8 @@ exports.resetPassword = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const hashedPassword = await bcrypt.hash('password123', 10);
+    const DEFAULT_PASSWORD = process.env.DEFAULT_PASSWORD || 'password123';
+    const hashedPassword = await bcrypt.hash(DEFAULT_PASSWORD, 10);
 
     await db.query(
       'UPDATE users SET password = ?, updated_at = NOW() WHERE id = ? AND is_deleted = FALSE',
